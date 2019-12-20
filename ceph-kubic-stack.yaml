@@ -179,29 +179,14 @@ resources:
           # CRI-o stream port
           port_range_min: 10010
           port_range_max: 10010
-
-  secgroup_master:
-    type: OS::Neutron::SecurityGroup
-    properties:
-      rules:
-        # etcd
+        # cilium health check
         - protocol: tcp
-          port_range_min: 2379
-          port_range_max: 2380
-        # k8s api
-        - protocol: tcp
-          port_range_min: 6443
-          port_range_max: 6444
-        - protocol: udp
-          port_range_min: 8285
-          port_range_max: 8285
+          port_range_min: 4240
+          port_range_max: 4240
         # VXLAN
         - protocol: udp
           port_range_min: 8471
           port_range_max: 8472
-        - protocol: udp
-          port_range_min: 4789
-          port_range_max: 4789
         # kubelet
         - protocol: tcp
           port_range_min: 10250
@@ -220,6 +205,26 @@ resources:
         - protocol: udp
           port_range_min: 30000
           port_range_max: 32768
+
+
+  secgroup_master:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      rules:
+        # etcd
+        - protocol: tcp
+          port_range_min: 2379
+          port_range_max: 2380
+        # k8s api
+        - protocol: tcp
+          port_range_min: 6443
+          port_range_max: 6444
+        - protocol: udp
+          port_range_min: 8285
+          port_range_max: 8285
+        - protocol: udp
+          port_range_min: 4789
+          port_range_max: 4789
 
   secgroup_worker:
     type: OS::Neutron::SecurityGroup
@@ -252,9 +257,6 @@ resources:
           port_range_max: 7300
         # VXLAN
         - protocol: udp
-          port_range_min: 8471
-          port_range_max: 8472
-        - protocol: udp
           port_range_min: 4789
           port_range_max: 4789
         - protocol: tcp
@@ -269,23 +271,9 @@ resources:
           # Prometheus
           port_range_min: 9128
           port_range_max: 9128
-        # kubelet
-        - protocol: tcp
-          port_range_min: 10250
-          port_range_max: 10250
-        # kube-proxy
-        - protocol: tcp
-          port_range_min: 10256
-          port_range_max: 10256
         - protocol: udp
           port_range_min: 8285
           port_range_max: 8285
-        - protocol: tcp
-          port_range_min: 30000
-          port_range_max: 32768
-        - protocol: udp
-          port_range_min: 30000
-          port_range_max: 32768
 
   master:
     type: OS::Nova::Server
